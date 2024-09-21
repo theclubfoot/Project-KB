@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './QuestionsPage.module.css';
 
@@ -59,18 +59,27 @@ function QuestionsPage() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(30);
   const navigate = useNavigate();
 
   const handleNext = useCallback(() => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(prevQuestion => prevQuestion + 1);
-      setSelectedAnswer('');
-      setTimer(30);
-    } else {
-      navigate('/results');
-    }
-  }, [currentQuestion, navigate, questions.length]);
+    setScore(prevScore => {
+      const newScore = selectedAnswer === questions[currentQuestion].correctAnswer 
+        ? prevScore + 1 
+        : prevScore;
+
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prevQuestion => prevQuestion + 1);
+        setSelectedAnswer('');
+        setTimer(30);
+      } else {
+        navigate('/results', { state: { score: newScore, totalQuestions: questions.length } });
+      }
+
+      return newScore;
+    });
+  }, [currentQuestion, navigate, questions]);
 
   useEffect(() => {
     if (timer > 0) {
@@ -80,8 +89,6 @@ function QuestionsPage() {
       handleNext();
     }
   }, [timer, handleNext]);
-
-  // Removed handleAnswerSelect function as it's not being used
 
   return (
     <div className={styles.questionsContainer}>

@@ -2,16 +2,16 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './components/AuthPage';
 import QuestionsPage from './components/QuestionsPage';
-// import other necessary components
+// eslint-disable-next-line no-unused-vars
+import ResultsPage from './components/ResultsPage';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        {/* Temporarily allow direct access to QuestionsPage for testing */}
         <Route path="/questions" element={<QuestionsPage />} />
-        {/* Other routes */}
+        <Route path="/results" element={<ResultsPage />} />
       </Routes>
     </Router>
   );
