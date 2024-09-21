@@ -5,12 +5,18 @@ import styles from './ResultsPage.module.css';
 function ResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { score, totalQuestions } = location.state || { score: 0, totalQuestions: 10 };
+  const { score, totalQuestions, questions, userAnswers } = location.state || { score: 0, totalQuestions: 0, questions: [], userAnswers: [] };
 
   const percentage = Math.round((score / totalQuestions) * 100);
 
   const handleReviewClick = () => {
-    navigate('/review', { state: { score, totalQuestions } });
+    if (questions && questions.length > 0) {
+      navigate('/review', { state: { questions, userAnswers } });
+    } else {
+      // Handle the case where questions are not available
+      alert("No questions available for review. Please complete the quiz first.");
+      navigate('/');
+    }
   };
 
   return (
