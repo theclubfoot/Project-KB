@@ -1,55 +1,86 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faTwitter, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import './AuthPage.css';
 import styles from './AuthPage.module.css';
 
-function AuthPage() {
-  const [isLoginForm, setIsLoginForm] = useState(true);
+const AuthPage = () => {
   const navigate = useNavigate();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Your authentication logic here
-    // For now, we'll just navigate to the questions page
-    navigate('/questions');
+  const toggleSignUp = () => {
+    setIsSignUp(!isSignUp);
   };
 
-  const toggleForm = (value) => {
-    setIsLoginForm(value);
+  const handleSignIn = (event) => {
+    event.preventDefault();
+    // Mock authentication logic
+    if (email === 'testuser@example.com' && password === 'password123') {
+      navigate('/questions');
+    } else {
+      alert('Invalid email or password');
+    }
   };
 
   return (
-    <div className={styles.hero}>
-      <div className={styles.formbox}>
-        <div className={styles.buttonBox}>
-          <div id="btn" className={styles.btn} style={{ left: isLoginForm ? '0px' : '110px' }}></div>
-          <button type="button" className={styles.toggleBtn} onClick={() => toggleForm(true)}>Log In</button>
-          <button type="button" className={styles.toggleBtn} onClick={() => toggleForm(false)}>Register</button>
-        </div>
-        <div className={styles.socialIcons}>
-          <FontAwesomeIcon icon={faFacebook} />
-          <FontAwesomeIcon icon={faTwitter} />
-          <FontAwesomeIcon icon={faGoogle} />
-        </div>
-        <form onSubmit={handleLogin} className={`${styles.inputGroup} ${styles.login}`} style={{left: isLoginForm ? '50px' : '-400px'}}>
-          <input type="text" className={styles.inputField} placeholder="User Id" required />
-          <input type="password" className={styles.inputField} placeholder="Enter Password" required />
-          <input type="checkbox" className={styles.checkBox} id="remember-password" />
-          <label htmlFor="remember-password">Remember Password</label>
-          <button type="submit" className={styles.submitBtn}>Log in</button>
+    <div className={`${styles.container} ${isSignUp ? styles.rightPanelActive : ''}`} id="container">
+      <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
+        <form action="#">
+          <h1>Create Account</h1>
+          <div className={styles.socialContainer}>
+            <button className={styles.social}><i className="fab fa-facebook-f"></i></button>
+            <button className={styles.social}><i className="fab fa-google-plus-g"></i></button>
+            <button className={styles.social}><i className="fab fa-linkedin-in"></i></button>
+          </div>
+          <span>or use your email for registration</span>
+          <input type="text" placeholder="Name" />
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button>Sign Up</button>
         </form>
-        <form className={`${styles.inputGroup} ${styles.register}`} style={{left: isLoginForm ? '450px' : '50px'}}>
-          <input type="text" className={styles.inputField} placeholder="User Id" required />
-          <input type="email" className={styles.inputField} placeholder="Email Id" required />
-          <input type="password" className={styles.inputField} placeholder="Enter Password" required />
-          <input type="checkbox" className={styles.checkBox} id="agree-terms" />
-          <label htmlFor="agree-terms">I agree to the terms & conditions</label>
-          <button type="submit" className={styles.submitBtn}>Register</button>
+      </div>
+      <div className={`${styles.formContainer} ${styles.signInContainer}`}>
+        <form onSubmit={handleSignIn}>
+          <h1>Sign in</h1>
+          <div className={styles.socialContainer}>
+            <button className={styles.social}><i className="fab fa-facebook-f"></i></button>
+            <button className={styles.social}><i className="fab fa-google-plus-g"></i></button>
+            <button className={styles.social}><i className="fab fa-linkedin-in"></i></button>
+          </div>
+          <span>or use your account</span>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button className={styles.linkButton}>Forgot your password?</button>
+          <button type="submit">Sign In</button>
         </form>
+      </div>
+      <div className={styles.overlayContainer}>
+        <div className={styles.overlay}>
+          <div className={`${styles.overlayPanel} ${styles.overlayLeft}`}>
+            <h1>Welcome Back!</h1>
+            <p>To keep connected with us please login with your personal info</p>
+            <button className={styles.ghost} id="signIn" onClick={toggleSignUp}>Sign In</button>
+          </div>
+          <div className={`${styles.overlayPanel} ${styles.overlayRight}`}>
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start journey with us</p>
+            <button className={styles.ghost} id="signUp" onClick={toggleSignUp}>Sign Up</button>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default AuthPage;
